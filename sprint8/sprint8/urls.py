@@ -15,7 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from api.views import *
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/datos/<int:pk>/',DatosCliente.as_view()),#get
+    path('api/cuenta/<int:pk>/',SaldoCuenta.as_view()),#get
+    path('api/prestamos/<int:pk>/',MontoPrestamo.as_view()),#get
+    path('api/prestamossucursal/<int:pk>/',PrestamosSucursal.as_view()),#get
+    path('api/tarcredito/<int:pk>/',TarjetasCredito.as_view()), #get
+    path('api/pedir/<int:pk>/',PedirPrestamo.as_view()),#post
+    path('api/anular/<int:pk>/',AnularPrestamo.as_view()),#delate
+    path('api/modificar/<int:pk>/',ModificarDireccion.as_view()), #put
+    path('api/sucursales/',Sucursales.as_view()), #get 
 ]
