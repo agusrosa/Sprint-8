@@ -1,7 +1,7 @@
 from http import client
 from django.shortcuts import render
-from api.models import Cliente,Sucursal,Empleado,Direccion,Tiposclientes,Prestamo,TipoCuenta,Cuenta,MarcaTarjeta,Tarjeta,User
-from api.serializers import ClienteSerializer,PrestamoSerializer,CuentasSerializer,SucursalSerializer,DireccionesSerializer,TarjetaSerializer
+from api.models import *
+from api.serializers import *
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -22,6 +22,15 @@ class DatosCliente (APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 
+    def put(self, request, pk):
+        cliente = Cliente.objects.filter(pk=pk).first()
+        serializer = ClienteSerializer(cliente, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class SaldoCuenta(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get(self, request, pk):
@@ -32,13 +41,26 @@ class SaldoCuenta(APIView):
          return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 
 class MontoPrestamo(APIView):
-    ermission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    def get(self, request, pk):
+         prestamo = Prestamo.objects.filter(pk=pk).first()
+         serializer = PrestamoSerializer(prestamo)
+         if prestamo:
+            return Response(serializer.data, status=status.HTTP_200_OK)
+         return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 
 class PrestamosSucursal(APIView):
     ermission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class TarjetasCredito(APIView):
-    ermission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    #def get(self, request, pk):
+    #    tarjeta = Tarjeta.objects.filter(cliente_cuenta=pk).first()
+     #   print(tarjeta)
+     #   serializer = TarjetaSerializer(tarjeta)
+    #    if tarjeta:
+    #        return Response(serializer.data, status=status.HTTP_200_OK)
+    #    return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND) """
 
 class PedirPrestamo(APIView):
     ermission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -47,10 +69,31 @@ class AnularPrestamo(APIView):
     ermission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class ModificarDireccion(APIView):
-    ermission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    def get(self, request, pk):
+        dir = Direcciones.objects.all(pk)
+        serializer = DireccionesSerializer(dir)
+        if dir:
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
+
+    """ def put(self, request, pk):
+        cliente = Cliente.objects.filter(pk=pk).first()
+        serializer = ClienteSerializer(cliente, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) """
 
 class Sucursales(APIView):
     ermission_classes = [permissions.IsAuthenticatedOrReadOnly]
+   # def get(self, request):
+    #     sucursal = Sucursal.objects.all().order_by('branch_id')
+      #   serializer = SucursalSerializer(sucursal)
+      #   if sucursal:
+       #      return Response(serializer.data, status=status.HTTP_200_OK)
+      #   return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
+     
 
 # class UserList(generics.ListAPIView):
    #  queryset = User.objects.all()

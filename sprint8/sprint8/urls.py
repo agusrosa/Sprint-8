@@ -17,7 +17,6 @@ from django.contrib import admin
 from django.urls import path,include
 from api.views import *
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/datos/<int:pk>/',DatosCliente.as_view()),#get
@@ -30,3 +29,4 @@ urlpatterns = [
     path('api/modificar/<int:pk>/',ModificarDireccion.as_view()), #put
     path('api/sucursales/',Sucursales.as_view()), #get 
 ]
+

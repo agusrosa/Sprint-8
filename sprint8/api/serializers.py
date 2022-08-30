@@ -1,6 +1,6 @@
 from dataclasses import field
 from rest_framework import serializers
-from .models import Prestamo, Cuenta, Direccion, Cliente, Tarjeta
+from .models import *
 from django.contrib.auth.models import User
 
 class PrestamoSerializer(serializers.ModelSerializer):
@@ -20,14 +20,14 @@ class CuentasSerializer(serializers.ModelSerializer):
 class SucursalSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     class Meta:
-        model = Cuenta
+        model = Sucursal
         fields = "__all__"
 
 
 class DireccionesSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     class Meta:
-        model = Direccion
+        model = Direcciones
         fields = "__all__"
 
 

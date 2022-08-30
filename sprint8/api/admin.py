@@ -7,14 +7,14 @@ from .models import *
 
 class DatosAdmin(admin.ModelAdmin):
    
-    admin.site.register(User)
+    #admin.site.register(User)
     admin.site.register(Cliente)
     admin.site.register(Sucursal)
     admin.site.register(Empleado)
-    admin.site.register(Direccion)
-    admin.site.register(Tiposclientes)
+   # admin.site.register(Direccion)
+   # admin.site.register(Tiposclientes)
     admin.site.register(Prestamo)
-    admin.site.register(TipoCuenta)
+   # admin.site.register(TipoCuenta)
     admin.site.register(Cuenta)
-    admin.site.register(MarcaTarjeta)
+   # admin.site.register(MarcaTarjeta)
     admin.site.register(Tarjeta) 
