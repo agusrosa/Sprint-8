@@ -22,6 +22,7 @@ class SucursalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sucursal
         fields = "__all__"
+        
 
 
 class DireccionesSerializer(serializers.ModelSerializer):

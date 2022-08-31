@@ -1,4 +1,6 @@
 from http import client
+import re
+from xml.etree.ElementTree import tostring
 from django.shortcuts import render
 from api.models import *
 from api.serializers import *
@@ -51,50 +53,56 @@ class MontoPrestamo(APIView):
 
 class PrestamosSucursal(APIView):
     ermission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    def get(self,request,pk):
+         prestamo = Prestamo.objects.filter(pk=pk).first()
+         serializer = PrestamoSerializer(prestamo)
+         if prestamo:
+            return Response(serializer.data, status=status.HTTP_200_OK)
+         return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 
 class TarjetasCredito(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    #def get(self, request, pk):
-    #    tarjeta = Tarjeta.objects.filter(cliente_cuenta=pk).first()
-     #   print(tarjeta)
-     #   serializer = TarjetaSerializer(tarjeta)
-    #    if tarjeta:
-    #        return Response(serializer.data, status=status.HTTP_200_OK)
-    #    return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND) """
+    def get(self,request,pk): 
+         tar = Tarjeta.objects.filter(cliente_cuenta=pk).first()
+         serializer = PrestamoSerializer(tar)
+         if tar:
+            return Response(serializer.data, status=status.HTTP_200_OK)
+         return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 
 class PedirPrestamo(APIView):
-    ermission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    def post(self, request, format=None):
+        serializer = PrestamoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class AnularPrestamo(APIView):
     ermission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    def delete(self, request, pk):
+        pres = Prestamo.objects.filter(loan_id=pk).first()
+        if pres:
+            serializer = PrestamoSerializer(pres)
+            pres.delete()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 class ModificarDireccion(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get(self, request, pk):
-        dir = Direcciones.objects.all(pk)
-        serializer = DireccionesSerializer(dir)
-        if dir:
+         dire = Direcciones.objects.filter(numero=pk).first()
+         serializer = DireccionesSerializer(dire)
+         if dire:
             return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
-
-    """ def put(self, request, pk):
-        cliente = Cliente.objects.filter(pk=pk).first()
-        serializer = ClienteSerializer(cliente, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) """
+         return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 
 class Sucursales(APIView):
-    ermission_classes = [permissions.IsAuthenticatedOrReadOnly]
-   # def get(self, request):
-    #     sucursal = Sucursal.objects.all().order_by('branch_id')
-      #   serializer = SucursalSerializer(sucursal)
-      #   if sucursal:
-       #      return Response(serializer.data, status=status.HTTP_200_OK)
-      #   return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    def get(self,request):
+         sucursal = Sucursal.objects.all().order_by('branch_number')
+         serializer = SucursalSerializer(sucursal, many=True)
+         if sucursal:
+            return Response(serializer.data, status=status.HTTP_200_OK)
+         return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
      
-
-# class UserList(generics.ListAPIView):
-   #  queryset = User.objects.all()
-   #  serializer_class = UserSerializer 

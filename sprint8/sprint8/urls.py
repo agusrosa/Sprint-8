@@ -24,7 +24,7 @@ urlpatterns = [
     path('api/prestamos/<int:pk>/',MontoPrestamo.as_view()),#get
     path('api/prestamossucursal/<int:pk>/',PrestamosSucursal.as_view()),#get
     path('api/tarcredito/<int:pk>/',TarjetasCredito.as_view()), #get
-    path('api/pedir/<int:pk>/',PedirPrestamo.as_view()),#post
+    path('api/pedir/',PedirPrestamo.as_view()),#post
     path('api/anular/<int:pk>/',AnularPrestamo.as_view()),#delate
     path('api/modificar/<int:pk>/',ModificarDireccion.as_view()), #put
     path('api/sucursales/',Sucursales.as_view()), #get 
