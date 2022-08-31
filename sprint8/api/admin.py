@@ -11,7 +11,7 @@ class DatosAdmin(admin.ModelAdmin):
     admin.site.register(Cliente)
     admin.site.register(Sucursal)
     admin.site.register(Empleado)
-   # admin.site.register(Direccion)
+    admin.site.register(Direcciones)
    # admin.site.register(Tiposclientes)
     admin.site.register(Prestamo)
    # admin.site.register(TipoCuenta)

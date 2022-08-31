@@ -47,7 +47,7 @@ class Cuenta(models.Model):
 
 class Direcciones(models.Model):
     calle = models.TextField()
-    numero = models.IntegerField()
+    numero = models.IntegerField(primary_key=True)
     ciudad = models.TextField()
     provincia = models.TextField()
     pais = models.TextField()
@@ -106,7 +106,7 @@ class Sucursal(models.Model):
 
 
 class Tarjeta(models.Model):
-    numero = models.CharField(max_length=200)
+    numero = models.CharField(max_length=200, primary_key=True)
     cvv = models.IntegerField(db_column='CVV')  # Field name made lowercase.
     fecha_otorgamiento = models.TextField(db_column='Fecha_Otorgamiento', blank=True, null=True)  # Field name made lowercase. This field type is a guess.
     fecha_expiracion = models.TextField(db_column='fecha_Expiracion', blank=True, null=True)  # Field name made lowercase. This field type is a guess.
