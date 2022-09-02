@@ -82,7 +82,7 @@ class PedirPrestamo(APIView):
 class AnularPrestamo(APIView):
     ermission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def delete(self, request, pk):
-        pres = Prestamo.objects.filter(loan_id=pk).first()
+        pres = Prestamo.objects.filter(customer_id=pk).first()
         if pres:
             serializer = PrestamoSerializer(pres)
             pres.delete()
