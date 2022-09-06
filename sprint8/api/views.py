@@ -64,8 +64,10 @@ class PrestamosSucursal(APIView):
 class TarjetasCredito(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get(self,request,pk): 
-         tar = Tarjeta.objects.filter(cliente_cuenta=pk).first()
-         serializer = PrestamoSerializer(tar)
+         """ tar = Tarjeta.objects.filter(cliente_cuenta=pk).first() """
+         tar=Tarjeta.objects.all()
+         print(tar)
+         serializer = TarjetaSerializer(tar)
          if tar:
             return Response(serializer.data, status=status.HTTP_200_OK)
          return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)

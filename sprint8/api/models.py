@@ -106,7 +106,7 @@ class Sucursal(models.Model):
 
 
 class Tarjeta(models.Model):
-    numero = models.CharField(max_length=200, primary_key=True)
+    id = models.CharField(max_length=200,db_column='id' ,primary_key=True)
     cvv = models.IntegerField(db_column='CVV')  # Field name made lowercase.
     fecha_otorgamiento = models.TextField(db_column='Fecha_Otorgamiento', blank=True, null=True)  # Field name made lowercase. This field type is a guess.
     fecha_expiracion = models.TextField(db_column='fecha_Expiracion', blank=True, null=True)  # Field name made lowercase. This field type is a guess.
