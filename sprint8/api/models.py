@@ -106,14 +106,14 @@ class Sucursal(models.Model):
 
 
 class Tarjeta(models.Model):
-    id = models.CharField(max_length=200,db_column='id' ,primary_key=True)
+    id = models.IntegerField(db_column='id',primary_key=True)
     cvv = models.IntegerField(db_column='CVV')  # Field name made lowercase.
     fecha_otorgamiento = models.TextField(db_column='Fecha_Otorgamiento', blank=True, null=True)  # Field name made lowercase. This field type is a guess.
     fecha_expiracion = models.TextField(db_column='fecha_Expiracion', blank=True, null=True)  # Field name made lowercase. This field type is a guess.
     tipo_tarjeta = models.TextField()
-    marca = models.ForeignKey(MTarjetas, models.DO_NOTHING, db_column='marca')
+    marca = models.ForeignKey('MTarjetas', models.DO_NOTHING, db_column='marca')
     cliente_cuenta = models.ForeignKey('Cliente', models.DO_NOTHING, db_column='Cliente_cuenta')  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'tarjeta'
