@@ -8,6 +8,7 @@
 **OBTENER MONTO DE PRESTAMOS DE UNA SUCURSAL: http://127.0.0.1:8000/api/prestamossucursal/5/**  
 **LISTADO DE TODAS LAS SUCURSALES: http://127.0.0.1:8000/api/sucursales/**  
 **VER DIRECCIONES DE UN CLIENTE : http://127.0.0.1:8000/api/modificar/25/**
+**VER TARJETA DE UN CLIENTE : http://127.0.0.1:8000/api/tarcredito/4/**
 # post  
 **GENERAR UNA SOLICITUD DE PRESTAMO PARA UN CLIENTE: http://127.0.0.1:8000/api/pedir/**  
   {
