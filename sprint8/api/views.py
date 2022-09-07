@@ -65,9 +65,10 @@ class TarjetasCredito(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get(self,request,pk): 
          """ tar = Tarjeta.objects.filter(cliente_cuenta=pk).first() """
-         tar=Tarjeta.objects.all()
+         tar=Tarjeta.objects.all().order_by("id")
          print(tar)
-         serializer = TarjetaSerializer(tar)
+         serializer = TarjetaSerializer(tar, many=True)
+         print(serializer)
          if tar:
             return Response(serializer.data, status=status.HTTP_200_OK)
          return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
