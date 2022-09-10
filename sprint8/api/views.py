@@ -13,11 +13,26 @@ from rest_framework import generics
 from rest_framework import status
 from django.contrib.auth.models import User
 from rest_framework import permissions
+from rest_framework.permissions import DjangoModelPermissions
+
+class CustomDjangoModelPermissions(DjangoModelPermissions):
+    view_permissions=['%(app_label)s.view_%(model_name)s']
+
+    perms_map={
+        'GET':view_permissions,
+        'OPTIONS':view_permissions,
+        'HEAD':view_permissions,
+        'POST':DjangoModelPermissions.perms_map['POST'],
+        'PUT':DjangoModelPermissions.perms_map['PUT'],
+        'PATCH':DjangoModelPermissions.perms_map['PATCH'],
+        'DELETE':DjangoModelPermissions.perms_map['DELETE'],
+    }
 
 
 # Create your views here.
 class DatosCliente (APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    queryset=Cliente.objects.all()
+    permission_classes =[CustomDjangoModelPermissions]
     def get(self, request, pk):
         cliente = Cliente.objects.filter(pk=pk).first()
         serializer = ClienteSerializer(cliente)
@@ -35,7 +50,8 @@ class DatosCliente (APIView):
 
 
 class SaldoCuenta(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    queryset=Cuenta.objects.all()
+    permission_classes =[CustomDjangoModelPermissions]
     def get(self, request, pk):
          cuenta = Cuenta.objects.filter(pk=pk).first()
          serializer = CuentasSerializer(cuenta)
@@ -44,7 +60,8 @@ class SaldoCuenta(APIView):
          return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 
 class MontoPrestamo(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    queryset=Cliente.objects.all()
+    permission_classes =[CustomDjangoModelPermissions]
     def get(self, request, pk):
          prestamo = Prestamo.objects.filter(customer_id=pk).first()
          serializer = PrestamoSerializer(prestamo)
@@ -53,8 +70,11 @@ class MontoPrestamo(APIView):
          return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 
 class PrestamosSucursal(APIView):
-    ermission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    queryset=Prestamo.objects.all()
+    permission_classes =[CustomDjangoModelPermissions]
     def get(self,request,pk):
+         print(self)
+         print("fasfasd")
          prestamo = Prestamo.objects.filter(pk=pk).first()
          serializer = PrestamoSerializer(prestamo)
          if prestamo:
@@ -62,7 +82,8 @@ class PrestamosSucursal(APIView):
          return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 
 class TarjetasCredito(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    queryset=Tarjeta.objects.all()
+    permission_classes =[CustomDjangoModelPermissions]
     def get(self,request,pk): 
          """ tar = Tarjeta.objects.filter(cliente_cuenta=pk).first() """
          tar=Tarjeta.objects.filter(cliente_cuenta=pk).filter(tipo_tarjeta="credito").order_by("id")
@@ -75,7 +96,9 @@ class TarjetasCredito(APIView):
          return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 
 class PedirPrestamo(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    #permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    queryset=Prestamo.objects.all()
+    permission_classes = [permissions.DjangoModelPermissions]
     def post(self, request, format=None):
         serializer = PrestamoSerializer(data=request.data)
         if serializer.is_valid():
@@ -84,7 +107,8 @@ class PedirPrestamo(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class AnularPrestamo(APIView):
-    ermission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    queryset=Prestamo.objects.all()
+    permission_classes = [permissions.DjangoModelPermissions]
     def delete(self, request, pk):
         pres = Prestamo.objects.filter(customer_id=pk).first()
         if pres:
@@ -94,7 +118,8 @@ class AnularPrestamo(APIView):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 class ModificarDireccion(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    queryset=Direcciones.objects.all()
+    permission_classes = [permissions.DjangoModelPermissions]
     def get(self,request,pk):
          dire = Direcciones.objects.filter(clien=pk)
          print(dire[1])
